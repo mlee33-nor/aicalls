@@ -2,11 +2,7 @@ const config = window.NO_RING_CONFIG || {};
 
 function setAction(link, href, text) {
   link.href = href;
-  link.replaceChildren(document.createTextNode(`${text} `));
-  const arrow = document.createElement('span');
-  arrow.setAttribute('aria-hidden', 'true');
-  arrow.textContent = '↗';
-  link.append(arrow);
+  link.textContent = text;
 }
 
 let contact = '';
