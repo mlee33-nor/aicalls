@@ -1,9 +1,95 @@
-document.querySelectorAll('.wave').forEach(wave=>{for(let i=0;i<55;i++){const bar=document.createElement('i');bar.style.height=(5+Math.abs(Math.sin(i*1.8)*Math.cos(i*.17))*42)+'px';wave.appendChild(bar)}});
-const scenarios={hvac:{business:'Your home services business',name:'Alex · callback number captured',reason:'AC stopped cooling this afternoon',next:'Team to call back about repair availability',messages:[['assistant','Thanks for calling. I’m the AI assistant helping while the team is busy. How can I help?'],['caller','My AC stopped cooling this afternoon. Is someone available to take a look?'],['assistant','I can get your details to the team. Could I have your name and the best number to reach you?'],['caller','I’m Alex. Yes, you can use the number I’m calling from.'],['assistant','Thanks, Alex. I’ll pass along that your AC stopped cooling and you’d like to hear about repair availability.']]},auto:{business:'Your auto repair shop',name:'Jordan · callback number captured',reason:'Brakes squeaking; asks about an inspection',next:'Team to call back about inspection availability',messages:[['assistant','Thanks for calling. I’m the shop’s AI assistant, helping while the team is busy. What can I help with?'],['caller','My brakes have started squeaking. Can I bring my car in for an inspection?'],['assistant','I can pass your request to the team. What’s your name, and is this a good callback number?'],['caller','It’s Jordan. This number is perfect.'],['assistant','Thanks, Jordan. I’ll let the team know you’re asking about an inspection for squeaking brakes.']]},salon:{business:'Your salon or studio',name:'Sam · callback number captured',reason:'Asks about a haircut appointment this week',next:'Team to call back with appointment options',messages:[['assistant','Hi! I’m the salon’s AI assistant, helping while the team is with clients. How can I help?'],['caller','I’m looking for a haircut appointment sometime this week.'],['assistant','I can share that with the team. Can I have your name and a number for them to reach you?'],['caller','My name’s Sam. The number I’m calling from works.'],['assistant','Thanks, Sam. I’ll pass along your request for a haircut this week so the team can get back to you with options.']]}};
-let selected='hvac',timer=null,playing=false;
-const transcript=document.getElementById('transcript'),runButton=document.getElementById('run-demo'),runLabel=document.getElementById('run-label'),badge=document.getElementById('demo-badge'),progress=document.getElementById('demo-progress');
-function resetDemo(){clearTimeout(timer);playing=false;runLabel.textContent='Run the example';runButton.firstElementChild.textContent='▶';badge.textContent='Ready';badge.classList.remove('complete');progress.textContent='A short, scripted example. No real call is placed.';transcript.innerHTML='<div class="demo-empty"><span aria-hidden="true">↘</span><h3>The next call could be a customer.</h3><p>Run the example to see how NO RING AI handles it.</p></div>';for(const key of ['name','reason','next'])document.getElementById('summary-'+key).textContent='—';document.getElementById('summary-note').textContent='The details appear here as the conversation unfolds.';document.getElementById('demo-business').textContent=scenarios[selected].business;}
-document.querySelectorAll('.scenario').forEach(button=>button.addEventListener('click',()=>{selected=button.dataset.scenario;document.querySelectorAll('.scenario').forEach(b=>{const active=b===button;b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active))});resetDemo()}));
-runButton.addEventListener('click',()=>{if(playing){resetDemo();return}resetDemo();playing=true;transcript.innerHTML='';runLabel.textContent='Reset example';runButton.firstElementChild.textContent='↻';badge.textContent='In conversation';const scenario=scenarios[selected];let index=0;function showMessage(){const message=scenario.messages[index];const bubble=document.createElement('div');bubble.className='message '+message[0];const label=document.createElement('span');label.textContent=message[0]==='assistant'?'NO RING AI':'CALLER';const body=document.createElement('p');body.textContent=message[1];bubble.append(label,body);transcript.append(bubble);transcript.scrollTop=transcript.scrollHeight;index++;progress.textContent='Conversation '+index+' / '+scenario.messages.length;if(index>=2)document.getElementById('summary-reason').textContent=scenario.reason;if(index>=4)document.getElementById('summary-name').textContent=scenario.name;if(index===scenario.messages.length){playing=false;badge.textContent='Details captured';badge.classList.add('complete');document.getElementById('summary-next').textContent=scenario.next;document.getElementById('summary-note').textContent='Example complete. Your team has the context to follow up.';runLabel.textContent='Replay example';progress.textContent='Opportunity captured. Your team takes it from here.';return}timer=setTimeout(showMessage,1800)}showMessage()});
-const observer=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('revealed');observer.unobserve(entry.target)}})},{threshold:.08});document.querySelectorAll('.steps article,.bento article,.section-heading,.closing,.faq-section').forEach(el=>{el.classList.add('reveal');observer.observe(el)});
-document.querySelectorAll('.call-panel,.bento article').forEach(panel=>{panel.addEventListener('pointermove',event=>{const rect=panel.getBoundingClientRect();panel.style.setProperty('--mx',`${event.clientX-rect.left}px`);panel.style.setProperty('--my',`${event.clientY-rect.top}px`)});});
+const config = window.NO_RING_CONFIG || {};
+
+function setAction(link, href, text) {
+  link.href = href;
+  link.replaceChildren(document.createTextNode(`${text} `));
+  const arrow = document.createElement('span');
+  arrow.setAttribute('aria-hidden', 'true');
+  arrow.textContent = '↗';
+  link.append(arrow);
+}
+
+let contact = '';
+let contactLabel = '';
+try {
+  const booking = new URL(config.bookingUrl);
+  if (booking.protocol === 'https:' && !booking.username && !booking.password) {
+    contact = booking.href;
+    contactLabel = 'Book a setup call';
+  }
+} catch {}
+
+if (!contact && typeof config.contactEmail === 'string' && /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(config.contactEmail)) {
+  contact = `mailto:${config.contactEmail}?subject=${encodeURIComponent('NO RING AI — setup for my business')}`;
+  contactLabel = 'Ask about your setup';
+}
+
+if (contact) {
+  document.querySelectorAll('[data-contact-link]').forEach(link => setAction(link, contact, contactLabel));
+  const panel = document.getElementById('contact-panel');
+  const action = document.getElementById('contact-action');
+  const footer = document.getElementById('footer-contact');
+  if (panel && action) {
+    panel.hidden = false;
+    setAction(action, contact, contactLabel);
+  }
+  if (footer) {
+    footer.hidden = false;
+    footer.href = contact;
+    footer.textContent = 'Contact';
+  }
+}
+
+const pricing = config.pricing;
+if (pricing && [pricing.monthly, pricing.minutes, pricing.overage].every(value => Number.isFinite(value) && value >= 0) && pricing.currency === 'USD') {
+  const heading = document.getElementById('price-heading');
+  const detail = document.getElementById('price-detail');
+  const list = document.getElementById('price-list');
+  if (heading && detail && list) {
+    const amount = document.createElement('span');
+    amount.className = 'price-amount';
+    amount.textContent = `$${pricing.monthly}`;
+    const period = document.createElement('span');
+    period.className = 'price-period';
+    period.textContent = ' / month';
+    heading.replaceChildren(amount, period);
+    detail.textContent = `${pricing.minutes} minutes included. $${pricing.overage.toFixed(2)} per additional minute.`;
+    list.replaceChildren();
+    for (const text of ['Inbound missed-call coverage', 'Business-specific greeting and call flow', 'Caller details and call summaries', 'Standard setup and forwarding assistance', 'Ongoing call-flow reviews']) {
+      const item = document.createElement('li');
+      item.textContent = text;
+      list.append(item);
+    }
+  }
+}
+
+document.querySelectorAll('.wave').forEach(wave => {
+  for (let index = 0; index < 55; index += 1) {
+    const bar = document.createElement('i');
+    bar.style.height = `${5 + Math.abs(Math.sin(index * 1.8) * Math.cos(index * 0.17)) * 42}px`;
+    wave.append(bar);
+  }
+});
+
+if ('IntersectionObserver' in window) {
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.steps article, .bento article, .section-heading, .closing, .faq-section, .phone-demo-card').forEach(element => {
+    element.classList.add('reveal');
+    observer.observe(element);
+  });
+}
+
+document.querySelectorAll('.call-panel, .bento article, .phone-demo-card').forEach(panel => {
+  panel.addEventListener('pointermove', event => {
+    const bounds = panel.getBoundingClientRect();
+    panel.style.setProperty('--mx', `${event.clientX - bounds.left}px`);
+    panel.style.setProperty('--my', `${event.clientY - bounds.top}px`);
+  });
+});

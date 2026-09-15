@@ -1,0 +1,13 @@
+{
+  "name": "no-ring-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NO RING AI missed-call backup website",
+  "scripts": {
+    "build": "node scripts/verify-site.cjs",
+    "start": "node preview.cjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
