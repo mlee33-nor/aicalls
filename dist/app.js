@@ -59,6 +59,44 @@ if (pricing && [pricing.monthly, pricing.minutes, pricing.overage].every(value =
   }
 }
 
+const calculator = {
+  missed: document.getElementById('missed-calls'),
+  value: document.getElementById('job-value'),
+  close: document.getElementById('close-rate'),
+  missedOutput: document.getElementById('missed-output'),
+  valueOutput: document.getElementById('value-output'),
+  closeOutput: document.getElementById('close-output'),
+  opportunity: document.getElementById('monthly-opportunity'),
+  jobs: document.getElementById('monthly-jobs'),
+  calls: document.getElementById('monthly-calls'),
+};
+
+if (Object.values(calculator).every(Boolean)) {
+  const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+  const updateCalculator = () => {
+    const missed = Number(calculator.missed.value);
+    const jobValue = Number(calculator.value.value);
+    const closeRate = Number(calculator.close.value) / 100;
+    const monthlyCalls = missed * 4.33;
+    const monthlyJobs = monthlyCalls * closeRate;
+    calculator.missedOutput.textContent = missed;
+    calculator.valueOutput.textContent = money.format(jobValue);
+    calculator.closeOutput.textContent = `${Math.round(closeRate * 100)}%`;
+    calculator.opportunity.textContent = money.format(monthlyJobs * jobValue);
+    calculator.jobs.textContent = Math.round(monthlyJobs);
+    calculator.calls.textContent = Math.round(monthlyCalls);
+  };
+  [calculator.missed, calculator.value, calculator.close].forEach(input => input.addEventListener('input', updateCalculator));
+  updateCalculator();
+}
+
+const mobileCallBar = document.querySelector('.mobile-call-bar');
+if (mobileCallBar) {
+  const updateMobileCallBar = () => mobileCallBar.classList.toggle('visible', window.scrollY > 520);
+  window.addEventListener('scroll', updateMobileCallBar, { passive: true });
+  updateMobileCallBar();
+}
+
 document.querySelectorAll('.wave').forEach(wave => {
   for (let index = 0; index < 55; index += 1) {
     const bar = document.createElement('i');
@@ -76,7 +114,7 @@ if ('IntersectionObserver' in window) {
       }
     });
   }, { threshold: 0.08 });
-  document.querySelectorAll('.steps article, .bento article, .section-heading, .closing, .faq-section, .phone-demo-card').forEach(element => {
+  document.querySelectorAll('.steps article, .bento article, .section-heading, .closing, .faq-section, .phone-demo-card, .calculator-card').forEach(element => {
     element.classList.add('reveal');
     observer.observe(element);
   });

@@ -16,4 +16,12 @@ if (!html.includes('NO RING AI') || !html.includes('tel:+15203817123')) {
   throw new Error('Expected brand or demo phone link is missing');
 }
 
+for (const expected of ['id="calculator"', 'Any industry', 'Your call flow', 'Your business rules']) {
+  if (!html.includes(expected)) throw new Error(`Expected conversion feature is missing: ${expected}`);
+}
+
+if (/[↗↘↙→📱☎📞]/u.test(html)) {
+  throw new Error('Platform-specific arrow or phone glyph found in page markup');
+}
+
 console.log('NO RING AI site assets verified');

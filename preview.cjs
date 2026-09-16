@@ -31,7 +31,7 @@ http.createServer((request, response) => {
     }
     response.writeHead(200, {
       'Content-Type': types[path.extname(file)] || 'application/octet-stream',
-      'Cache-Control': path.extname(file) === '.html' ? 'no-cache' : 'public, max-age=3600'
+      'Cache-Control': 'no-cache'
     });
     response.end(data);
   });
