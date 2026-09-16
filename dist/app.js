@@ -114,7 +114,7 @@ if ('IntersectionObserver' in window) {
       }
     });
   }, { threshold: 0.08 });
-  document.querySelectorAll('.steps article, .bento article, .section-heading, .closing, .faq-section, .phone-demo-card, .calculator-card').forEach(element => {
+  document.querySelectorAll('.steps article, .bento article, .section-heading, .closing, .faq-section, .phone-demo-card, .calculator-card, .vertical-card, .vertical-foot').forEach(element => {
     element.classList.add('reveal');
     observer.observe(element);
   });
