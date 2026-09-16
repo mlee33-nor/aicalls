@@ -16,8 +16,12 @@ if (!html.includes('NO RING AI') || !html.includes('tel:+15203817123')) {
   throw new Error('Expected brand or demo phone link is missing');
 }
 
-for (const expected of ['id="calculator"', 'Any industry', 'Your call flow', 'Your business rules', 'LOCKSMITHS', 'POOL SERVICES', 'data-demo-key="locksmith"', 'data-demo-key="pool"']) {
+for (const expected of ['id="calculator"', 'Any industry', 'Your call flow', 'Your business rules']) {
   if (!html.includes(expected)) throw new Error(`Expected conversion feature is missing: ${expected}`);
+}
+
+for (const removed of ['id="industries"', 'LOCKSMITHS', 'POOL SERVICES', 'data-demo-key="locksmith"', 'data-demo-key="pool"']) {
+  if (html.includes(removed)) throw new Error(`Removed industry section is still present: ${removed}`);
 }
 
 if (/[↗↘↙→📱☎📞]/u.test(html)) {
