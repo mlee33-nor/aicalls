@@ -36,6 +36,18 @@ if (contact) {
   }
 }
 
+const industryDemos = config.industryDemos || {};
+document.querySelectorAll('[data-demo-key]').forEach(link => {
+  const raw = industryDemos[link.dataset.demoKey];
+  if (typeof raw !== 'string') return;
+  const digits = raw.replace(/\D/g, '');
+  const normalized = digits.length === 10 ? `+1${digits}` : digits.length === 11 && digits.startsWith('1') ? `+${digits}` : '';
+  if (!normalized) return;
+  link.href = `tel:${normalized}`;
+  link.textContent = link.dataset.demoLabel || 'Call demo';
+  link.hidden = false;
+});
+
 const pricing = config.pricing;
 if (pricing && [pricing.monthly, pricing.minutes, pricing.overage].every(value => Number.isFinite(value) && value >= 0) && pricing.currency === 'USD') {
   const heading = document.getElementById('price-heading');
