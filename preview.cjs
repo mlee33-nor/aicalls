@@ -22,7 +22,10 @@ http.createServer((request, response) => {
   }
 
   let file = requested === root ? path.join(root, 'index.html') : requested;
-  if (!path.extname(file)) file = path.join(root, 'index.html');
+  if (!path.extname(file)) {
+    const directoryIndex = path.join(file, 'index.html');
+    file = fs.existsSync(directoryIndex) ? directoryIndex : path.join(root, 'index.html');
+  }
 
   fs.readFile(file, (error, data) => {
     if (error) {

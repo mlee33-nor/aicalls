@@ -20,6 +20,15 @@ if (!contact && typeof config.contactEmail === 'string' && /^[^\s@<>]+@[^\s@<>]+
   contactLabel = 'Ask about your setup';
 }
 
+if (!contact && typeof config.demoPhone === 'string') {
+  const digits = config.demoPhone.replace(/\D/g, '');
+  const normalized = digits.length === 10 ? `+1${digits}` : digits.length === 11 && digits.startsWith('1') ? `+${digits}` : '';
+  if (normalized) {
+    contact = `tel:${normalized}`;
+    contactLabel = 'Build my backup line';
+  }
+}
+
 if (contact) {
   document.querySelectorAll('[data-contact-link]').forEach(link => setAction(link, contact, contactLabel));
   const panel = document.getElementById('contact-panel');
@@ -35,6 +44,21 @@ if (contact) {
     footer.textContent = 'Contact';
   }
 }
+
+document.querySelectorAll('[data-copy-prompt]').forEach(button => {
+  button.addEventListener('click', async () => {
+    const prompt = button.dataset.copyPrompt;
+    if (!prompt) return;
+    const original = button.textContent;
+    try {
+      await navigator.clipboard.writeText(prompt);
+      button.textContent = 'Prompt copied';
+      window.setTimeout(() => { button.textContent = original; }, 1400);
+    } catch {
+      button.textContent = prompt;
+    }
+  });
+});
 
 const industryDemos = config.industryDemos || {};
 document.querySelectorAll('[data-demo-key]').forEach(link => {
@@ -126,7 +150,7 @@ if ('IntersectionObserver' in window) {
       }
     });
   }, { threshold: 0.08 });
-  document.querySelectorAll('.steps article, .bento article, .section-heading, .closing, .faq-section, .phone-demo-card, .calculator-card, .vertical-card, .vertical-foot').forEach(element => {
+  document.querySelectorAll('.steps article, .bento article, .section-heading, .closing, .faq-section, .phone-demo-card, .calculator-card, .proof-grid article, .choice-cards article').forEach(element => {
     element.classList.add('reveal');
     observer.observe(element);
   });
