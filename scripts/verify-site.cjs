@@ -16,7 +16,7 @@ if (!html.includes('NO RING AI') || !html.includes('tel:+15203817123')) {
   throw new Error('Expected brand or demo phone link is missing');
 }
 
-for (const expected of ['id="calculator"', 'Keep working.', 'Give callers a conversation.', '$199', 'data-copy-prompt', 'Build my backup line', 'PROOF YOU CAN TEST']) {
+for (const expected of ['id="calculator"', 'Keep working.', 'Give callers a conversation.', '$199', 'TRY SAYING ON THE CALL', 'Build my backup line', 'PROOF YOU CAN TEST']) {
   if (!html.includes(expected)) throw new Error(`Expected conversion feature is missing: ${expected}`);
 }
 

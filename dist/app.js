@@ -45,21 +45,6 @@ if (contact) {
   }
 }
 
-document.querySelectorAll('[data-copy-prompt]').forEach(button => {
-  button.addEventListener('click', async () => {
-    const prompt = button.dataset.copyPrompt;
-    if (!prompt) return;
-    const original = button.textContent;
-    try {
-      await navigator.clipboard.writeText(prompt);
-      button.textContent = 'Prompt copied';
-      window.setTimeout(() => { button.textContent = original; }, 1400);
-    } catch {
-      button.textContent = prompt;
-    }
-  });
-});
-
 const industryDemos = config.industryDemos || {};
 document.querySelectorAll('[data-demo-key]').forEach(link => {
   const raw = industryDemos[link.dataset.demoKey];
