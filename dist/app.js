@@ -16,7 +16,7 @@ try {
 } catch {}
 
 if (!contact && typeof config.contactEmail === 'string' && /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(config.contactEmail)) {
-  contact = `mailto:${config.contactEmail}?subject=${encodeURIComponent('RING ENGINE AI — setup for my business')}`;
+  contact = `mailto:${config.contactEmail}?subject=${encodeURIComponent('RING ENGINE AI — setup for my garage door company')}`;
   contactLabel = 'Ask about your setup';
 }
 
@@ -25,7 +25,7 @@ if (!contact && typeof config.demoPhone === 'string') {
   const normalized = digits.length === 10 ? `+1${digits}` : digits.length === 11 && digits.startsWith('1') ? `+${digits}` : '';
   if (normalized) {
     contact = `tel:${normalized}`;
-    contactLabel = 'Build my backup line';
+    contactLabel = 'Set up my garage-door line';
   }
 }
 
@@ -72,7 +72,7 @@ if (pricing && [pricing.monthly, pricing.minutes, pricing.overage].every(value =
     heading.replaceChildren(amount, period);
     detail.textContent = `${pricing.minutes} minutes included. $${pricing.overage.toFixed(2)} per additional minute.`;
     list.replaceChildren();
-    for (const text of ['Inbound missed-call coverage', 'Business-specific greeting and call flow', 'Caller details and call summaries', 'Standard setup and forwarding assistance', 'Ongoing call-flow reviews']) {
+    for (const text of ['Inbound missed-call coverage', 'Garage-door-specific greeting and call flow', 'Door issue, address, urgency, and call summaries', 'Standard setup and forwarding assistance', 'Ongoing call-flow reviews']) {
       const item = document.createElement('li');
       item.textContent = text;
       list.append(item);

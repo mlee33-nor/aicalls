@@ -16,7 +16,7 @@ if (!html.includes('RING ENGINE AI') || !html.includes('tel:+15203817123')) {
   throw new Error('Expected brand or demo phone link is missing');
 }
 
-for (const expected of ['id="calculator"', 'Keep working.', 'Give callers a conversation.', '$199', 'TRY SAYING ON THE CALL', 'Build my backup line', 'PROOF YOU CAN TEST']) {
+for (const expected of ['id="calculator"', 'Finish the repair.', 'garage door won’t open', '$199', 'TRY SAYING ON THE CALL', 'Set up my garage-door line', 'PROOF YOU CAN TEST']) {
   if (!html.includes(expected)) throw new Error(`Expected conversion feature is missing: ${expected}`);
 }
 
@@ -33,11 +33,10 @@ if (/junk|remov|garage cleanout|hauling/i.test(html)) {
 }
 
 for (const page of ['locksmiths/index.html', 'pool-service/index.html', 'cleaning-companies/index.html']) {
-  const niche = fs.readFileSync(path.join(root, page), 'utf8');
-  if (!niche.includes('RING ENGINE AI') || !niche.includes('tel:+15203817123') || !niche.includes('$199')) {
-    throw new Error(`Niche landing page is incomplete: ${page}`);
+  const legacy = fs.readFileSync(path.join(root, page), 'utf8');
+  if (!legacy.includes('noindex') || !legacy.includes('url=/')) {
+    throw new Error(`Legacy niche page should redirect to the garage-door homepage: ${page}`);
   }
-  if (/[↗↘↙→📱☎📞]/u.test(niche)) throw new Error(`Platform-specific glyph found in: ${page}`);
 }
 
 console.log('RING ENGINE AI site assets verified');
