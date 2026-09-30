@@ -1,5 +1,5 @@
 // Public business details only. Never put API keys or credentials in this file.
-window.NO_RING_CONFIG = {
+window.RING_ENGINE_CONFIG = {
   demoPhone: '(520) 381-7123',
   bookingUrl: '',
   contactEmail: '',

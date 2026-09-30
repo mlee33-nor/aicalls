@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://aicalls-production.up.railway.app/sitemap.xml
+Sitemap: https://www.ringengineai.com/sitemap.xml

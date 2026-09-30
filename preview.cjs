@@ -38,4 +38,4 @@ http.createServer((request, response) => {
     });
     response.end(data);
   });
-}).listen(port, host, () => console.log(`NO RING AI listening on ${host}:${port}`));
+}).listen(port, host, () => console.log(`RING ENGINE AI listening on ${host}:${port}`));

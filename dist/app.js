@@ -1,4 +1,4 @@
-const config = window.NO_RING_CONFIG || {};
+const config = window.RING_ENGINE_CONFIG || {};
 
 function setAction(link, href, text) {
   link.href = href;
@@ -16,7 +16,7 @@ try {
 } catch {}
 
 if (!contact && typeof config.contactEmail === 'string' && /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(config.contactEmail)) {
-  contact = `mailto:${config.contactEmail}?subject=${encodeURIComponent('NO RING AI — setup for my business')}`;
+  contact = `mailto:${config.contactEmail}?subject=${encodeURIComponent('RING ENGINE AI — setup for my business')}`;
   contactLabel = 'Ask about your setup';
 }
 

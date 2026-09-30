@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Ring Engine AI</title>
+  <desc id="desc">A modern RE monogram inside an electric lime rounded square.</desc>
+  <rect width="64" height="64" rx="16" fill="#d7fc70"/>
+  <circle cx="32" cy="32" r="23" fill="none" stroke="#18230e" stroke-width="2" opacity=".18"/>
+  <path d="M17 45V19h10.5c6.4 0 10.3 3.1 10.3 8.4 0 4.1-2.5 7-6.8 8l8 9.6h-7.4l-7.1-9H23v9h-6Zm6-14h4.2c3 0 4.6-1.1 4.6-3.5S30.2 24 27.2 24H23v7Z" fill="#18230e"/>
+  <path d="M39 20h9v5h-9zm0 9.5h7v5h-7zM39 40h9v5h-9z" fill="#18230e"/>
+</svg>
